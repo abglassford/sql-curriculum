@@ -4,6 +4,7 @@ const chai = require("chai");
 const chaiAsPromised = require("chai-as-promised");
 const spawn = require('child_process').spawn;
 const connection = require('knex');
+const fs = require('fs');
 
 chai.should();
 chai.use(chaiAsPromised);
@@ -56,4 +57,28 @@ function debug(msg) {
   if (process.env.DEBUG) {
     console.log(msg);
   }
+}
+
+function everyIndexOf(string, element) {
+  let indices = [];
+  let idx = string.indexOf(element);
+  while (idx != -1) {
+    indices.push(idx);
+    idx = string.indexOf(element, idx + 1);
+  }
+  return indices
+}
+
+function getSegments(string, indices) {
+  let result = []
+  for (var i = 0; i < indices.length; i++) {
+    result.push(string.substring(indices[i], indices[i + 1] || string.length - 1))
+  }
+  return result
+}
+
+exports.getStatements = function (filename) {
+  const sql = fs.readFileSync(filename, 'utf8');
+  let indices = everyIndexOf(sql, '/* Exercise');
+  return getSegments(sql, indices)
 }
