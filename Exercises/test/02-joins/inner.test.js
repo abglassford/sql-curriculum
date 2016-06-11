@@ -5,9 +5,9 @@ const fs = require('fs');
 describe("Inner joins", () => {
 
   it("returns pets and their owners name using an inner join", () => {
-    const sql = fs.readFileSync('src/joins/01-inner.sql', 'utf8');
+    const sql = fs.readFileSync('src/02-joins/01-inner.sql', 'utf8');
 
-    return psql('test/joins/01-inner.sql')
+    return psql('test/fixtures/pets.sql')
       .then(() => knex.raw(sql))
       .then(result => result.rows)
       .should.become([
