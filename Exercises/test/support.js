@@ -70,11 +70,15 @@ function everyIndexOf(string, element) {
 }
 
 function getSegments(string, indices) {
-  let result = []
-  for (var i = 0; i < indices.length; i++) {
-    result.push(string.substring(indices[i], indices[i + 1] || string.length - 1))
-  }
-  return result
+  return indices
+    .map((index, i) => {
+      return string.substring(index, indices[i + 1] || string.length - 1)
+    })
+    .reduce((result, statement) => {
+      let name = statement.split('\n')[0].replace('/* Exercise', '').trim()
+      result[name] = statement.substring( statement.indexOf('*/') + 2 ).trim()
+      return result
+    }, {})
 }
 
 exports.getStatements = function (filename) {

@@ -1,4 +1,4 @@
-/* Exercise #1
+/* Exercise createSports
 
 create a table named sports that has:
 
@@ -7,7 +7,7 @@ create a table named sports that has:
 
 */
 
-/* Exercise #2
+/* Exercise createCars
 
 create a table named cars that has:
 

@@ -10,6 +10,7 @@ describe("Creating tables", () => {
   })
 
   it("created the sports table successfully", () => {
+    expect(statements.createSports, "You must write SQL for the createSports challenge").to.exist
 
     const showTableSql = `
       select column_name, data_type, is_nullable
@@ -17,7 +18,7 @@ describe("Creating tables", () => {
       where table_name='sports';
     `
 
-    return knex.raw(statements[0])
+    return knex.raw(statements.createSports)
       .then(() => knex.raw(showTableSql))
       .then(result => result.rows)
       .should.become([
@@ -35,6 +36,7 @@ describe("Creating tables", () => {
   });
 
   it("created the cars table successfully", () => {
+    expect(statements.createCars, "You must write SQL for the createCars challenge").to.exist
 
     const showTableSql = `
       select column_name, data_type, is_nullable
@@ -42,7 +44,7 @@ describe("Creating tables", () => {
       where table_name='cars';
     `
 
-    return knex.raw(statements[1])
+    return knex.raw(statements.createCars)
       .then(() => knex.raw(showTableSql))
       .then(result => result.rows)
       .should.become([
