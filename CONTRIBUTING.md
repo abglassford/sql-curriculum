@@ -21,3 +21,57 @@ Check out solutions and run `git pull --rebase origin solutions` to make sure yo
 Paste your solutions, make sure they pass with `npm test` and commit.
 
 `git push origin solutions --force-with-lease`
+
+## Adding multiple SQL statements in one file
+
+The test harness makes it easy to add multiple SQL statements in one file, as long as that the sql file follows this format:
+
+```sql
+/* Exercise selectAll
+
+some description here...
+*/
+
+select * from users;
+
+/* Exercise selectSome
+
+some other description here...
+*/
+
+select name from users;
+```
+
+Notice how it has:
+
+- A line that starts with `/* Exercise <key>`
+- Closing comment markers `*/`
+- SQL is written after that comment
+
+In your test, do this:
+
+```js
+'use strict';
+const support = require('../support')
+
+describe("Creating tables", () => {
+  let statements
+
+  before(function () {
+    statements = support.getStatements('src/your/file.sql')
+  })
+
+  it("selects all from users", () => {
+    // write a test with statements.selectAll
+    // ...
+  });
+
+  it("selects limited columns from users", () => {
+    // write a test with statements.selectSome
+  });
+
+});
+
+```
+
+Look through existing tests for examples of this.
