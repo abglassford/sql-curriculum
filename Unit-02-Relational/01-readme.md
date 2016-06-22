@@ -131,17 +131,17 @@ and...
 INNER JOIN employments ON users.id = employments.user_id;
 ```
 
-## Inner / Left / Right Joins
+## Inner / Left / Right / Full Outer Joins
 
-There are several different ways you can join data.  Three common ways are inner join, left join and right join.
+There are several different ways you can join data.  Four common ways are inner join, left outer join, right outer join and full outer join. The "outer" part is often left off when talking about left, right, and full joins.
 
-Take a few minutes to search the internet for the differences between the three - joins have been around for years, so there's a plethora of great information and articles on what they are / when to use them.
+Take a few minutes to search the internet for the differences between the four - joins have been around for years, so there's a plethora of great information and articles on what they are / when to use them.
 
 ...
 
-Have you searched yet?  No really - go do that :)
+Having trouble finding resources? Try this [set of community guides](https://community.modeanalytics.com/sql/tutorial/sql-joins/) or this [interactive visualization of joins](http://joins.spathon.com/).
 
-You're back?  Awesome - let's talk about how to use them.
+You're back?  Awesome - let's talk about how to use them. How would you describe each join type? Can you think of an instance where that would be useful?
 
 ## Multiline queries in `psql`
 
