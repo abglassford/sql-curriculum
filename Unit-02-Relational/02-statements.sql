@@ -1,109 +1,38 @@
-SET statement_timeout = 0;
-SET lock_timeout = 0;
-SET client_encoding = 'UTF8';
-SET standard_conforming_strings = on;
-SET check_function_bodies = false;
-SET client_min_messages = warning;
-SET search_path = public, pg_catalog;
-
-CREATE SCHEMA IF NOT EXISTS public;
-
-CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
-
-SET search_path = public, pg_catalog;
-
-SET default_tablespace = '';
-
-SET default_with_oids = false;
+DROP TABLE IF EXISTS customers CASCADE;
 
 CREATE TABLE customers (
-    id integer NOT NULL,
-    name text,
-    email text,
-    address text,
-    city text,
-    state text,
-    zipcode text
+  id serial PRIMARY KEY,
+  name text,
+  email text,
+  address text,
+  city text,
+  state text,
+  zipcode text
 );
 
-CREATE SEQUENCE customers_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-ALTER SEQUENCE customers_id_seq OWNED BY customers.id;
+DROP TABLE IF EXISTS items CASCADE;
 
 CREATE TABLE items (
-    id integer NOT NULL,
-    name text,
-    description text
+  id serial PRIMARY KEY,
+  name text,
+  description text
 );
 
-CREATE SEQUENCE items_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-ALTER SEQUENCE items_id_seq OWNED BY items.id;
-
-CREATE TABLE orderitems (
-    id integer NOT NULL,
-    order_id integer,
-    item_id integer
-);
-
-CREATE SEQUENCE orderitems_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-ALTER SEQUENCE orderitems_id_seq OWNED BY orderitems.id;
+DROP TABLE IF EXISTS orders CASCADE;
 
 CREATE TABLE orders (
-    id integer NOT NULL,
-    customer_id integer,
-    amount numeric
+  id serial PRIMARY KEY,
+  customer_id integer NOT NULL REFERENCES customers ON DELETE CASCADE,
+  amount numeric(4, 2)
 );
 
-CREATE SEQUENCE orders_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
+DROP TABLE IF EXISTS items_orders;
 
-
-
-ALTER SEQUENCE orders_id_seq OWNED BY orders.id;
-
-
-ALTER TABLE ONLY customers ALTER COLUMN id SET DEFAULT nextval('customers_id_seq'::regclass);
-
-
-ALTER TABLE ONLY items ALTER COLUMN id SET DEFAULT nextval('items_id_seq'::regclass);
-
-
-ALTER TABLE ONLY orderitems ALTER COLUMN id SET DEFAULT nextval('orderitems_id_seq'::regclass);
-
-ALTER TABLE ONLY orders ALTER COLUMN id SET DEFAULT nextval('orders_id_seq'::regclass);
-
-ALTER TABLE ONLY customers
-    ADD CONSTRAINT customers_pkey PRIMARY KEY (id);
-
-ALTER TABLE ONLY items
-    ADD CONSTRAINT items_pkey PRIMARY KEY (id);
-
-ALTER TABLE ONLY orderitems
-    ADD CONSTRAINT orderitems_pkey PRIMARY KEY (id);
-
-ALTER TABLE ONLY orders
-    ADD CONSTRAINT orders_pkey PRIMARY KEY (id);
+CREATE TABLE items_orders (
+  id serial PRIMARY KEY,
+  item_id integer NOT NULL REFERENCES items ON DELETE CASCADE,
+  order_id integer NOT NULL REFERENCES orders ON DELETE CASCADE
+);
 
 INSERT INTO customers (name, email, address, city, state, zipcode) VALUES ('Donato Rempel','ladarius@waelchi.org','890 Ullrich Plains', 'Janachester', 'Virginia', '77714');
 INSERT INTO customers (name, email, address, city, state, zipcode) VALUES ('Tyrell Von DDS','cleo_frami@bartondenesik.name','63337 Abdullah Camp', 'Verdieborough', 'Colorado', '69882-7027');
@@ -125,174 +54,6 @@ INSERT INTO items (name, description) VALUES ('bike03', 'tricycle');
 INSERT INTO items (name, description) VALUES ('boot01', 'hiking boots');
 INSERT INTO items (name, description) VALUES ('boot02', 'ski boots');
 INSERT INTO items (name, description) VALUES ('boot03', 'moon boots');
-
-INSERT INTO orderitems (order_id, item_id) VALUES ('1', '3');
-INSERT INTO orderitems (order_id, item_id) VALUES ('1', '2');
-INSERT INTO orderitems (order_id, item_id) VALUES ('1', '4');
-INSERT INTO orderitems (order_id, item_id) VALUES ('2', '5');
-INSERT INTO orderitems (order_id, item_id) VALUES ('2', '4');
-INSERT INTO orderitems (order_id, item_id) VALUES ('2', '8');
-INSERT INTO orderitems (order_id, item_id) VALUES ('2', '9');
-INSERT INTO orderitems (order_id, item_id) VALUES ('3', '3');
-INSERT INTO orderitems (order_id, item_id) VALUES ('3', '4');
-INSERT INTO orderitems (order_id, item_id) VALUES ('3', '8');
-INSERT INTO orderitems (order_id, item_id) VALUES ('4', '6');
-INSERT INTO orderitems (order_id, item_id) VALUES ('4', '5');
-INSERT INTO orderitems (order_id, item_id) VALUES ('4', '9');
-INSERT INTO orderitems (order_id, item_id) VALUES ('4', '2');
-INSERT INTO orderitems (order_id, item_id) VALUES ('5', '5');
-INSERT INTO orderitems (order_id, item_id) VALUES ('5', '8');
-INSERT INTO orderitems (order_id, item_id) VALUES ('5', '3');
-INSERT INTO orderitems (order_id, item_id) VALUES ('5', '9');
-INSERT INTO orderitems (order_id, item_id) VALUES ('6', '9');
-INSERT INTO orderitems (order_id, item_id) VALUES ('6', '6');
-INSERT INTO orderitems (order_id, item_id) VALUES ('6', '1');
-INSERT INTO orderitems (order_id, item_id) VALUES ('6', '5');
-INSERT INTO orderitems (order_id, item_id) VALUES ('7', '2');
-INSERT INTO orderitems (order_id, item_id) VALUES ('7', '3');
-INSERT INTO orderitems (order_id, item_id) VALUES ('7', '4');
-INSERT INTO orderitems (order_id, item_id) VALUES ('7', '5');
-INSERT INTO orderitems (order_id, item_id) VALUES ('8', '6');
-INSERT INTO orderitems (order_id, item_id) VALUES ('8', '5');
-INSERT INTO orderitems (order_id, item_id) VALUES ('8', '2');
-INSERT INTO orderitems (order_id, item_id) VALUES ('8', '7');
-INSERT INTO orderitems (order_id, item_id) VALUES ('9', '1');
-INSERT INTO orderitems (order_id, item_id) VALUES ('9', '8');
-INSERT INTO orderitems (order_id, item_id) VALUES ('9', '7');
-INSERT INTO orderitems (order_id, item_id) VALUES ('9', '3');
-INSERT INTO orderitems (order_id, item_id) VALUES ('10', '1');
-INSERT INTO orderitems (order_id, item_id) VALUES ('10', '2');
-INSERT INTO orderitems (order_id, item_id) VALUES ('11', '4');
-INSERT INTO orderitems (order_id, item_id) VALUES ('11', '3');
-INSERT INTO orderitems (order_id, item_id) VALUES ('11', '8');
-INSERT INTO orderitems (order_id, item_id) VALUES ('12', '9');
-INSERT INTO orderitems (order_id, item_id) VALUES ('12', '4');
-INSERT INTO orderitems (order_id, item_id) VALUES ('12', '5');
-INSERT INTO orderitems (order_id, item_id) VALUES ('13', '6');
-INSERT INTO orderitems (order_id, item_id) VALUES ('13', '2');
-INSERT INTO orderitems (order_id, item_id) VALUES ('13', '4');
-INSERT INTO orderitems (order_id, item_id) VALUES ('13', '3');
-INSERT INTO orderitems (order_id, item_id) VALUES ('14', '9');
-INSERT INTO orderitems (order_id, item_id) VALUES ('14', '8');
-INSERT INTO orderitems (order_id, item_id) VALUES ('14', '1');
-INSERT INTO orderitems (order_id, item_id) VALUES ('15', '3');
-INSERT INTO orderitems (order_id, item_id) VALUES ('15', '5');
-INSERT INTO orderitems (order_id, item_id) VALUES ('16', '9');
-INSERT INTO orderitems (order_id, item_id) VALUES ('16', '5');
-INSERT INTO orderitems (order_id, item_id) VALUES ('16', '4');
-INSERT INTO orderitems (order_id, item_id) VALUES ('17', '7');
-INSERT INTO orderitems (order_id, item_id) VALUES ('17', '6');
-INSERT INTO orderitems (order_id, item_id) VALUES ('17', '1');
-INSERT INTO orderitems (order_id, item_id) VALUES ('17', '4');
-INSERT INTO orderitems (order_id, item_id) VALUES ('18', '3');
-INSERT INTO orderitems (order_id, item_id) VALUES ('18', '2');
-INSERT INTO orderitems (order_id, item_id) VALUES ('18', '4');
-INSERT INTO orderitems (order_id, item_id) VALUES ('19', '3');
-INSERT INTO orderitems (order_id, item_id) VALUES ('19', '8');
-INSERT INTO orderitems (order_id, item_id) VALUES ('19', '2');
-INSERT INTO orderitems (order_id, item_id) VALUES ('19', '9');
-INSERT INTO orderitems (order_id, item_id) VALUES ('20', '5');
-INSERT INTO orderitems (order_id, item_id) VALUES ('20', '9');
-INSERT INTO orderitems (order_id, item_id) VALUES ('20', '2');
-INSERT INTO orderitems (order_id, item_id) VALUES ('20', '7');
-INSERT INTO orderitems (order_id, item_id) VALUES ('21', '7');
-INSERT INTO orderitems (order_id, item_id) VALUES ('21', '9');
-INSERT INTO orderitems (order_id, item_id) VALUES ('21', '2');
-INSERT INTO orderitems (order_id, item_id) VALUES ('21', '5');
-INSERT INTO orderitems (order_id, item_id) VALUES ('22', '4');
-INSERT INTO orderitems (order_id, item_id) VALUES ('22', '5');
-INSERT INTO orderitems (order_id, item_id) VALUES ('22', '6');
-INSERT INTO orderitems (order_id, item_id) VALUES ('23', '8');
-INSERT INTO orderitems (order_id, item_id) VALUES ('23', '2');
-INSERT INTO orderitems (order_id, item_id) VALUES ('24', '8');
-INSERT INTO orderitems (order_id, item_id) VALUES ('24', '6');
-INSERT INTO orderitems (order_id, item_id) VALUES ('24', '9');
-INSERT INTO orderitems (order_id, item_id) VALUES ('25', '9');
-INSERT INTO orderitems (order_id, item_id) VALUES ('25', '3');
-INSERT INTO orderitems (order_id, item_id) VALUES ('25', '7');
-INSERT INTO orderitems (order_id, item_id) VALUES ('25', '6');
-INSERT INTO orderitems (order_id, item_id) VALUES ('26', '7');
-INSERT INTO orderitems (order_id, item_id) VALUES ('26', '5');
-INSERT INTO orderitems (order_id, item_id) VALUES ('26', '1');
-INSERT INTO orderitems (order_id, item_id) VALUES ('26', '4');
-INSERT INTO orderitems (order_id, item_id) VALUES ('27', '6');
-INSERT INTO orderitems (order_id, item_id) VALUES ('27', '3');
-INSERT INTO orderitems (order_id, item_id) VALUES ('27', '1');
-INSERT INTO orderitems (order_id, item_id) VALUES ('27', '7');
-INSERT INTO orderitems (order_id, item_id) VALUES ('28', '5');
-INSERT INTO orderitems (order_id, item_id) VALUES ('28', '6');
-INSERT INTO orderitems (order_id, item_id) VALUES ('29', '2');
-INSERT INTO orderitems (order_id, item_id) VALUES ('29', '9');
-INSERT INTO orderitems (order_id, item_id) VALUES ('29', '4');
-INSERT INTO orderitems (order_id, item_id) VALUES ('30', '2');
-INSERT INTO orderitems (order_id, item_id) VALUES ('30', '4');
-INSERT INTO orderitems (order_id, item_id) VALUES ('30', '8');
-INSERT INTO orderitems (order_id, item_id) VALUES ('31', '5');
-INSERT INTO orderitems (order_id, item_id) VALUES ('31', '9');
-INSERT INTO orderitems (order_id, item_id) VALUES ('31', '4');
-INSERT INTO orderitems (order_id, item_id) VALUES ('31', '3');
-INSERT INTO orderitems (order_id, item_id) VALUES ('32', '6');
-INSERT INTO orderitems (order_id, item_id) VALUES ('32', '4');
-INSERT INTO orderitems (order_id, item_id) VALUES ('32', '2');
-INSERT INTO orderitems (order_id, item_id) VALUES ('32', '8');
-INSERT INTO orderitems (order_id, item_id) VALUES ('33', '1');
-INSERT INTO orderitems (order_id, item_id) VALUES ('33', '4');
-INSERT INTO orderitems (order_id, item_id) VALUES ('33', '5');
-INSERT INTO orderitems (order_id, item_id) VALUES ('34', '2');
-INSERT INTO orderitems (order_id, item_id) VALUES ('34', '4');
-INSERT INTO orderitems (order_id, item_id) VALUES ('34', '9');
-INSERT INTO orderitems (order_id, item_id) VALUES ('34', '7');
-INSERT INTO orderitems (order_id, item_id) VALUES ('35', '2');
-INSERT INTO orderitems (order_id, item_id) VALUES ('35', '3');
-INSERT INTO orderitems (order_id, item_id) VALUES ('35', '9');
-INSERT INTO orderitems (order_id, item_id) VALUES ('35', '8');
-INSERT INTO orderitems (order_id, item_id) VALUES ('36', '6');
-INSERT INTO orderitems (order_id, item_id) VALUES ('36', '7');
-INSERT INTO orderitems (order_id, item_id) VALUES ('36', '8');
-INSERT INTO orderitems (order_id, item_id) VALUES ('37', '5');
-INSERT INTO orderitems (order_id, item_id) VALUES ('37', '2');
-INSERT INTO orderitems (order_id, item_id) VALUES ('37', '1');
-INSERT INTO orderitems (order_id, item_id) VALUES ('38', '8');
-INSERT INTO orderitems (order_id, item_id) VALUES ('38', '5');
-INSERT INTO orderitems (order_id, item_id) VALUES ('38', '9');
-INSERT INTO orderitems (order_id, item_id) VALUES ('38', '3');
-INSERT INTO orderitems (order_id, item_id) VALUES ('39', '2');
-INSERT INTO orderitems (order_id, item_id) VALUES ('39', '8');
-INSERT INTO orderitems (order_id, item_id) VALUES ('39', '3');
-INSERT INTO orderitems (order_id, item_id) VALUES ('40', '7');
-INSERT INTO orderitems (order_id, item_id) VALUES ('40', '5');
-INSERT INTO orderitems (order_id, item_id) VALUES ('40', '2');
-INSERT INTO orderitems (order_id, item_id) VALUES ('41', '6');
-INSERT INTO orderitems (order_id, item_id) VALUES ('41', '2');
-INSERT INTO orderitems (order_id, item_id) VALUES ('41', '5');
-INSERT INTO orderitems (order_id, item_id) VALUES ('42', '1');
-INSERT INTO orderitems (order_id, item_id) VALUES ('42', '5');
-INSERT INTO orderitems (order_id, item_id) VALUES ('42', '3');
-INSERT INTO orderitems (order_id, item_id) VALUES ('42', '6');
-INSERT INTO orderitems (order_id, item_id) VALUES ('43', '7');
-INSERT INTO orderitems (order_id, item_id) VALUES ('43', '8');
-INSERT INTO orderitems (order_id, item_id) VALUES ('43', '5');
-INSERT INTO orderitems (order_id, item_id) VALUES ('44', '7');
-INSERT INTO orderitems (order_id, item_id) VALUES ('44', '4');
-INSERT INTO orderitems (order_id, item_id) VALUES ('44', '6');
-INSERT INTO orderitems (order_id, item_id) VALUES ('44', '8');
-INSERT INTO orderitems (order_id, item_id) VALUES ('45', '5');
-INSERT INTO orderitems (order_id, item_id) VALUES ('45', '1');
-INSERT INTO orderitems (order_id, item_id) VALUES ('45', '2');
-INSERT INTO orderitems (order_id, item_id) VALUES ('46', '6');
-INSERT INTO orderitems (order_id, item_id) VALUES ('46', '1');
-INSERT INTO orderitems (order_id, item_id) VALUES ('47', '3');
-INSERT INTO orderitems (order_id, item_id) VALUES ('47', '7');
-INSERT INTO orderitems (order_id, item_id) VALUES ('47', '4');
-INSERT INTO orderitems (order_id, item_id) VALUES ('48', '7');
-INSERT INTO orderitems (order_id, item_id) VALUES ('48', '2');
-INSERT INTO orderitems (order_id, item_id) VALUES ('48', '1');
-INSERT INTO orderitems (order_id, item_id) VALUES ('48', '3');
-INSERT INTO orderitems (order_id, item_id) VALUES ('49', '9');
-INSERT INTO orderitems (order_id, item_id) VALUES ('49', '1');
-INSERT INTO orderitems (order_id, item_id) VALUES ('49', '6');
-INSERT INTO orderitems (order_id, item_id) VALUES ('50', '8');
-INSERT INTO orderitems (order_id, item_id) VALUES ('50', '2');
 
 INSERT INTO orders (customer_id, amount) VALUES (6, 63.35);
 INSERT INTO orders (customer_id, amount) VALUES (5, 55.42);
@@ -344,3 +105,171 @@ INSERT INTO orders (customer_id, amount) VALUES (8, 31.07);
 INSERT INTO orders (customer_id, amount) VALUES (7, 80.36);
 INSERT INTO orders (customer_id, amount) VALUES (3, 50.1);
 INSERT INTO orders (customer_id, amount) VALUES (5, 59.5);
+
+INSERT INTO items_orders (order_id, item_id) VALUES ('1', '3');
+INSERT INTO items_orders (order_id, item_id) VALUES ('1', '2');
+INSERT INTO items_orders (order_id, item_id) VALUES ('1', '4');
+INSERT INTO items_orders (order_id, item_id) VALUES ('2', '5');
+INSERT INTO items_orders (order_id, item_id) VALUES ('2', '4');
+INSERT INTO items_orders (order_id, item_id) VALUES ('2', '8');
+INSERT INTO items_orders (order_id, item_id) VALUES ('2', '9');
+INSERT INTO items_orders (order_id, item_id) VALUES ('3', '3');
+INSERT INTO items_orders (order_id, item_id) VALUES ('3', '4');
+INSERT INTO items_orders (order_id, item_id) VALUES ('3', '8');
+INSERT INTO items_orders (order_id, item_id) VALUES ('4', '6');
+INSERT INTO items_orders (order_id, item_id) VALUES ('4', '5');
+INSERT INTO items_orders (order_id, item_id) VALUES ('4', '9');
+INSERT INTO items_orders (order_id, item_id) VALUES ('4', '2');
+INSERT INTO items_orders (order_id, item_id) VALUES ('5', '5');
+INSERT INTO items_orders (order_id, item_id) VALUES ('5', '8');
+INSERT INTO items_orders (order_id, item_id) VALUES ('5', '3');
+INSERT INTO items_orders (order_id, item_id) VALUES ('5', '9');
+INSERT INTO items_orders (order_id, item_id) VALUES ('6', '9');
+INSERT INTO items_orders (order_id, item_id) VALUES ('6', '6');
+INSERT INTO items_orders (order_id, item_id) VALUES ('6', '1');
+INSERT INTO items_orders (order_id, item_id) VALUES ('6', '5');
+INSERT INTO items_orders (order_id, item_id) VALUES ('7', '2');
+INSERT INTO items_orders (order_id, item_id) VALUES ('7', '3');
+INSERT INTO items_orders (order_id, item_id) VALUES ('7', '4');
+INSERT INTO items_orders (order_id, item_id) VALUES ('7', '5');
+INSERT INTO items_orders (order_id, item_id) VALUES ('8', '6');
+INSERT INTO items_orders (order_id, item_id) VALUES ('8', '5');
+INSERT INTO items_orders (order_id, item_id) VALUES ('8', '2');
+INSERT INTO items_orders (order_id, item_id) VALUES ('8', '7');
+INSERT INTO items_orders (order_id, item_id) VALUES ('9', '1');
+INSERT INTO items_orders (order_id, item_id) VALUES ('9', '8');
+INSERT INTO items_orders (order_id, item_id) VALUES ('9', '7');
+INSERT INTO items_orders (order_id, item_id) VALUES ('9', '3');
+INSERT INTO items_orders (order_id, item_id) VALUES ('10', '1');
+INSERT INTO items_orders (order_id, item_id) VALUES ('10', '2');
+INSERT INTO items_orders (order_id, item_id) VALUES ('11', '4');
+INSERT INTO items_orders (order_id, item_id) VALUES ('11', '3');
+INSERT INTO items_orders (order_id, item_id) VALUES ('11', '8');
+INSERT INTO items_orders (order_id, item_id) VALUES ('12', '9');
+INSERT INTO items_orders (order_id, item_id) VALUES ('12', '4');
+INSERT INTO items_orders (order_id, item_id) VALUES ('12', '5');
+INSERT INTO items_orders (order_id, item_id) VALUES ('13', '6');
+INSERT INTO items_orders (order_id, item_id) VALUES ('13', '2');
+INSERT INTO items_orders (order_id, item_id) VALUES ('13', '4');
+INSERT INTO items_orders (order_id, item_id) VALUES ('13', '3');
+INSERT INTO items_orders (order_id, item_id) VALUES ('14', '9');
+INSERT INTO items_orders (order_id, item_id) VALUES ('14', '8');
+INSERT INTO items_orders (order_id, item_id) VALUES ('14', '1');
+INSERT INTO items_orders (order_id, item_id) VALUES ('15', '3');
+INSERT INTO items_orders (order_id, item_id) VALUES ('15', '5');
+INSERT INTO items_orders (order_id, item_id) VALUES ('16', '9');
+INSERT INTO items_orders (order_id, item_id) VALUES ('16', '5');
+INSERT INTO items_orders (order_id, item_id) VALUES ('16', '4');
+INSERT INTO items_orders (order_id, item_id) VALUES ('17', '7');
+INSERT INTO items_orders (order_id, item_id) VALUES ('17', '6');
+INSERT INTO items_orders (order_id, item_id) VALUES ('17', '1');
+INSERT INTO items_orders (order_id, item_id) VALUES ('17', '4');
+INSERT INTO items_orders (order_id, item_id) VALUES ('18', '3');
+INSERT INTO items_orders (order_id, item_id) VALUES ('18', '2');
+INSERT INTO items_orders (order_id, item_id) VALUES ('18', '4');
+INSERT INTO items_orders (order_id, item_id) VALUES ('19', '3');
+INSERT INTO items_orders (order_id, item_id) VALUES ('19', '8');
+INSERT INTO items_orders (order_id, item_id) VALUES ('19', '2');
+INSERT INTO items_orders (order_id, item_id) VALUES ('19', '9');
+INSERT INTO items_orders (order_id, item_id) VALUES ('20', '5');
+INSERT INTO items_orders (order_id, item_id) VALUES ('20', '9');
+INSERT INTO items_orders (order_id, item_id) VALUES ('20', '2');
+INSERT INTO items_orders (order_id, item_id) VALUES ('20', '7');
+INSERT INTO items_orders (order_id, item_id) VALUES ('21', '7');
+INSERT INTO items_orders (order_id, item_id) VALUES ('21', '9');
+INSERT INTO items_orders (order_id, item_id) VALUES ('21', '2');
+INSERT INTO items_orders (order_id, item_id) VALUES ('21', '5');
+INSERT INTO items_orders (order_id, item_id) VALUES ('22', '4');
+INSERT INTO items_orders (order_id, item_id) VALUES ('22', '5');
+INSERT INTO items_orders (order_id, item_id) VALUES ('22', '6');
+INSERT INTO items_orders (order_id, item_id) VALUES ('23', '8');
+INSERT INTO items_orders (order_id, item_id) VALUES ('23', '2');
+INSERT INTO items_orders (order_id, item_id) VALUES ('24', '8');
+INSERT INTO items_orders (order_id, item_id) VALUES ('24', '6');
+INSERT INTO items_orders (order_id, item_id) VALUES ('24', '9');
+INSERT INTO items_orders (order_id, item_id) VALUES ('25', '9');
+INSERT INTO items_orders (order_id, item_id) VALUES ('25', '3');
+INSERT INTO items_orders (order_id, item_id) VALUES ('25', '7');
+INSERT INTO items_orders (order_id, item_id) VALUES ('25', '6');
+INSERT INTO items_orders (order_id, item_id) VALUES ('26', '7');
+INSERT INTO items_orders (order_id, item_id) VALUES ('26', '5');
+INSERT INTO items_orders (order_id, item_id) VALUES ('26', '1');
+INSERT INTO items_orders (order_id, item_id) VALUES ('26', '4');
+INSERT INTO items_orders (order_id, item_id) VALUES ('27', '6');
+INSERT INTO items_orders (order_id, item_id) VALUES ('27', '3');
+INSERT INTO items_orders (order_id, item_id) VALUES ('27', '1');
+INSERT INTO items_orders (order_id, item_id) VALUES ('27', '7');
+INSERT INTO items_orders (order_id, item_id) VALUES ('28', '5');
+INSERT INTO items_orders (order_id, item_id) VALUES ('28', '6');
+INSERT INTO items_orders (order_id, item_id) VALUES ('29', '2');
+INSERT INTO items_orders (order_id, item_id) VALUES ('29', '9');
+INSERT INTO items_orders (order_id, item_id) VALUES ('29', '4');
+INSERT INTO items_orders (order_id, item_id) VALUES ('30', '2');
+INSERT INTO items_orders (order_id, item_id) VALUES ('30', '4');
+INSERT INTO items_orders (order_id, item_id) VALUES ('30', '8');
+INSERT INTO items_orders (order_id, item_id) VALUES ('31', '5');
+INSERT INTO items_orders (order_id, item_id) VALUES ('31', '9');
+INSERT INTO items_orders (order_id, item_id) VALUES ('31', '4');
+INSERT INTO items_orders (order_id, item_id) VALUES ('31', '3');
+INSERT INTO items_orders (order_id, item_id) VALUES ('32', '6');
+INSERT INTO items_orders (order_id, item_id) VALUES ('32', '4');
+INSERT INTO items_orders (order_id, item_id) VALUES ('32', '2');
+INSERT INTO items_orders (order_id, item_id) VALUES ('32', '8');
+INSERT INTO items_orders (order_id, item_id) VALUES ('33', '1');
+INSERT INTO items_orders (order_id, item_id) VALUES ('33', '4');
+INSERT INTO items_orders (order_id, item_id) VALUES ('33', '5');
+INSERT INTO items_orders (order_id, item_id) VALUES ('34', '2');
+INSERT INTO items_orders (order_id, item_id) VALUES ('34', '4');
+INSERT INTO items_orders (order_id, item_id) VALUES ('34', '9');
+INSERT INTO items_orders (order_id, item_id) VALUES ('34', '7');
+INSERT INTO items_orders (order_id, item_id) VALUES ('35', '2');
+INSERT INTO items_orders (order_id, item_id) VALUES ('35', '3');
+INSERT INTO items_orders (order_id, item_id) VALUES ('35', '9');
+INSERT INTO items_orders (order_id, item_id) VALUES ('35', '8');
+INSERT INTO items_orders (order_id, item_id) VALUES ('36', '6');
+INSERT INTO items_orders (order_id, item_id) VALUES ('36', '7');
+INSERT INTO items_orders (order_id, item_id) VALUES ('36', '8');
+INSERT INTO items_orders (order_id, item_id) VALUES ('37', '5');
+INSERT INTO items_orders (order_id, item_id) VALUES ('37', '2');
+INSERT INTO items_orders (order_id, item_id) VALUES ('37', '1');
+INSERT INTO items_orders (order_id, item_id) VALUES ('38', '8');
+INSERT INTO items_orders (order_id, item_id) VALUES ('38', '5');
+INSERT INTO items_orders (order_id, item_id) VALUES ('38', '9');
+INSERT INTO items_orders (order_id, item_id) VALUES ('38', '3');
+INSERT INTO items_orders (order_id, item_id) VALUES ('39', '2');
+INSERT INTO items_orders (order_id, item_id) VALUES ('39', '8');
+INSERT INTO items_orders (order_id, item_id) VALUES ('39', '3');
+INSERT INTO items_orders (order_id, item_id) VALUES ('40', '7');
+INSERT INTO items_orders (order_id, item_id) VALUES ('40', '5');
+INSERT INTO items_orders (order_id, item_id) VALUES ('40', '2');
+INSERT INTO items_orders (order_id, item_id) VALUES ('41', '6');
+INSERT INTO items_orders (order_id, item_id) VALUES ('41', '2');
+INSERT INTO items_orders (order_id, item_id) VALUES ('41', '5');
+INSERT INTO items_orders (order_id, item_id) VALUES ('42', '1');
+INSERT INTO items_orders (order_id, item_id) VALUES ('42', '5');
+INSERT INTO items_orders (order_id, item_id) VALUES ('42', '3');
+INSERT INTO items_orders (order_id, item_id) VALUES ('42', '6');
+INSERT INTO items_orders (order_id, item_id) VALUES ('43', '7');
+INSERT INTO items_orders (order_id, item_id) VALUES ('43', '8');
+INSERT INTO items_orders (order_id, item_id) VALUES ('43', '5');
+INSERT INTO items_orders (order_id, item_id) VALUES ('44', '7');
+INSERT INTO items_orders (order_id, item_id) VALUES ('44', '4');
+INSERT INTO items_orders (order_id, item_id) VALUES ('44', '6');
+INSERT INTO items_orders (order_id, item_id) VALUES ('44', '8');
+INSERT INTO items_orders (order_id, item_id) VALUES ('45', '5');
+INSERT INTO items_orders (order_id, item_id) VALUES ('45', '1');
+INSERT INTO items_orders (order_id, item_id) VALUES ('45', '2');
+INSERT INTO items_orders (order_id, item_id) VALUES ('46', '6');
+INSERT INTO items_orders (order_id, item_id) VALUES ('46', '1');
+INSERT INTO items_orders (order_id, item_id) VALUES ('47', '3');
+INSERT INTO items_orders (order_id, item_id) VALUES ('47', '7');
+INSERT INTO items_orders (order_id, item_id) VALUES ('47', '4');
+INSERT INTO items_orders (order_id, item_id) VALUES ('48', '7');
+INSERT INTO items_orders (order_id, item_id) VALUES ('48', '2');
+INSERT INTO items_orders (order_id, item_id) VALUES ('48', '1');
+INSERT INTO items_orders (order_id, item_id) VALUES ('48', '3');
+INSERT INTO items_orders (order_id, item_id) VALUES ('49', '9');
+INSERT INTO items_orders (order_id, item_id) VALUES ('49', '1');
+INSERT INTO items_orders (order_id, item_id) VALUES ('49', '6');
+INSERT INTO items_orders (order_id, item_id) VALUES ('50', '8');
+INSERT INTO items_orders (order_id, item_id) VALUES ('50', '2');

@@ -3,7 +3,7 @@
 Open 'psql' and type the command:
 
 ```sql
-CREATE DATABASE exercisedb;
+CREATE DATABASE retailer;
 ```
 
 **Import the tables**
@@ -11,7 +11,7 @@ CREATE DATABASE exercisedb;
 From the terminal command line (not the psql terminal) type:
 
 ```
-psql -d exercisedb -f 02-statements.sql
+psql retailer -f 02-statements.sql
 ```
 
 ## Review
