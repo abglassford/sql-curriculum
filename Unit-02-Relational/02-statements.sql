@@ -1,4 +1,7 @@
 DROP TABLE IF EXISTS customers CASCADE;
+DROP TABLE IF EXISTS items CASCADE;
+DROP TABLE IF EXISTS orders CASCADE;
+DROP TABLE IF EXISTS items_orders;
 
 CREATE TABLE customers (
   id serial PRIMARY KEY,
@@ -10,23 +13,17 @@ CREATE TABLE customers (
   zipcode text
 );
 
-DROP TABLE IF EXISTS items CASCADE;
-
 CREATE TABLE items (
   id serial PRIMARY KEY,
   name text,
   description text
 );
 
-DROP TABLE IF EXISTS orders CASCADE;
-
 CREATE TABLE orders (
   id serial PRIMARY KEY,
   customer_id integer NOT NULL REFERENCES customers ON DELETE CASCADE,
   amount numeric(4, 2)
 );
-
-DROP TABLE IF EXISTS items_orders;
 
 CREATE TABLE items_orders (
   id serial PRIMARY KEY,
