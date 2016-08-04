@@ -1,8 +1,18 @@
 # Intro to SQL and Relational Databases
 
-## Setup
+## Unit 1 - Installation and Introduction to SQL
 
-Fork and clone this repository.
+1. [Installing Postgres + Intro to RDBMS and SQL](./Unit-01-Intro/01-intro-to-pg-and-sql.md)
+2. [DDL and DML](./Unit-01-Intro/02-ddl-and-dml.md)
+3. [SQL Operators and Aggregates](./Unit-01-Intro/03-sql-operators-and-aggregates.md)
+
+## Unit 2 - Aggregation, Joins and Data Modeling
+
+1. [Introduction to Joins and Relationships](./Unit-02-Relational/01-intro-to-joins-and-relationships.md)
+2. [Joins Continued](./Unit-02-Relational/02-joins-continued.md)
+3. [Data Modeling and Normalization](./Unit-02-Relational/03-data-modeling-and-normalization.md)
+3. [Indexes Set Operators and Sub Queries](./Unit-02-Relational/04-indexes-set-operators-and-sub-queries.md)
+1. [Roles and Permissions](./Unit-02-Relational/05-roles-and-permissions.md)
 
 ## Objectives (there are a _lot_)
 
@@ -60,9 +70,3 @@ Fork and clone this repository.
 - Describe migrations
 - Describe and identify database drivers, migration libraries, query builders and ORMs
 - Describe SQL injection attacks and how to prevent them
-
-## Sequence
-
-- [Unit 1 (basic SQL and queries)](Unit-01-Intro/README.md)
-- [Unit 2 (relational concepts)](Unit-02-Relational/)
-- [Unit 3 (aggregation)](Unit-03-Aggregations/README.md)
