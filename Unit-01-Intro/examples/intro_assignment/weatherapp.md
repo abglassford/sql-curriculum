@@ -1,6 +1,4 @@
-
-
-## Exercise - weatherapp
+# Exercise - weatherapp
 
 Create the database:
 
