@@ -221,3 +221,10 @@ Continue working with joins by completing the [join exercises on sqlzoo.net](htt
 - [Use The Index, Luke - A guide to database performance for developers](http://use-the-index-luke.com/)
 
 ![SQL JOINS](http://www.codeproject.com/KB/database/Visual_SQL_Joins/Visual_SQL_JOINS_orig.jpg)
+
+# Slides
+
+* [Slides](https://docs.google.com/presentation/d/1D2KDtjzg0dllOQgIFeCg3GsNqxaN9FeNBXsBd9kVCx0/edit?usp=sharing)
+* [SQL](https://docs.google.com/presentation/d/1DfB36GeO9nJEs-7D1QIXkgQgjc7hyo2PZ6lQA-qkZwE/edit#slide=id.gd7ac0ef0a_0_8)
+* [Postgres/psql](https://docs.google.com/presentation/d/1jlaTZqUeNDk_GvHMS5cqaoQgS03Ocj4t__jQsFHkqrs/edit?usp=sharing)
+* [Join & Join Types](http://slides.com/tylerbettilyon/jointypes/)
