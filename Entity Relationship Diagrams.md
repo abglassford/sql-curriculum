@@ -499,6 +499,10 @@ Write an SQL command that displays the follow rows.
 - [Youtube - Entity Relationship Diagram Training](https://www.youtube.com/watch?v=-fQ-bRllhXc)
 - [Youtube - Introduction to Set Theory](https://www.youtube.com/watch?v=yCwnifwVjIg)
 
+- https://en.wikipedia.org/wiki/Many-to-many_(data_model)
+- https://en.wikipedia.org/wiki/Many-to-one_(data_model)
+- https://en.wikipedia.org/wiki/One-to-one_(data_model)
+
 ## Diagram Apps
 
 - [Draw.io](https://www.draw.io/)
@@ -510,7 +514,3 @@ Write an SQL command that displays the follow rows.
 ### Entity Relationship Diagrams (ERD)
 
 <iframe src="https://player.vimeo.com/video/142034756?byline=0&portrait=0" width="500" height="281" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
-
-[many-to-many]: https://en.wikipedia.org/wiki/Many-to-many_(data_model)
-[many-to-one]: https://en.wikipedia.org/wiki/Many-to-one_(data_model)
-[one-to-one]: https://en.wikipedia.org/wiki/One-to-one_(data_model)

@@ -707,7 +707,6 @@ Recreate the following ERD and populate each table with at least 10 pieces of da
 - [PostgreSQL Documentation - Querying a Table](https://www.postgresql.org/docs/current/static/tutorial-select.html)
 - [SQL Tutorial - Home](http://www.sqltutorial.org/)
 - [SQL Tutorial - SQL Cheatsheet](http://www.sqltutorial.org/wp-content/uploads/2016/04/sqlcheatsheet.pdf)
-- [W3Schools - SQL Tutorial](http://www.w3schools.com/sql/default.asp)
 - [http://www.postgresql.org/docs/](http://www.postgresql.org/docs/)  - This is your friend!
 - [http://www.cheat-sheets.org/saved-copy/sqlcheetsheet.gif](http://www.cheat-sheets.org/saved-copy/sqlcheetsheet.gif)
 - [http://www.sql-tutorial.net/SQL-Cheat-Sheet.pdf](http://www.sql-tutorial.net/SQL-Cheat-Sheet.pdf)
