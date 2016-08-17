@@ -113,3 +113,10 @@ __EXERCISE__
 * Just for fun, get all the possible combinations of orders and customers
 * Find all the customers with exactly 1 order
 * Look at the [exercisedb readme](./examples/02-readme.md).  Work on the exercises in the readme.
+
+# Slides
+
+* [Slides](https://docs.google.com/presentation/d/1D2KDtjzg0dllOQgIFeCg3GsNqxaN9FeNBXsBd9kVCx0/edit?usp=sharing)
+* [SQL](https://docs.google.com/presentation/d/1DfB36GeO9nJEs-7D1QIXkgQgjc7hyo2PZ6lQA-qkZwE/edit#slide=id.gd7ac0ef0a_0_8)
+* [Postgres/psql](https://docs.google.com/presentation/d/1jlaTZqUeNDk_GvHMS5cqaoQgS03Ocj4t__jQsFHkqrs/edit?usp=sharing)
+* [Join & Join Types](http://slides.com/tylerbettilyon/jointypes/)
