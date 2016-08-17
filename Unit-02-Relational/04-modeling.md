@@ -1,1 +1,1 @@
-This article has [moved](Exercises/src/leaderboard/README.md).
+This article has [moved](../Entity Relationships.md).

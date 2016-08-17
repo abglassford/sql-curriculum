@@ -1,3 +1,5 @@
+# Database Indexes
+
 ## Objectives
 
 - Describe what a database index is.
@@ -27,9 +29,9 @@ To get started, run the following shell commands.
 
 ```bash
 git clone https://github.com/gSchool/sql-curriculum.git
-cd sql-curriculum/Unit-02-Relational
+cd sql-curriculum/Exercises/src/geo
 createdb geodb
-psql geodb -f geodb.sql
+psql geodb -f geo_dev.sql
 psql geodb
 ```
 
@@ -137,7 +139,7 @@ Now list out the index tables.
 \di+
 ```
 
-And you'll see something liket this.
+And you'll see something like this.
 
 ```
                                  List of relations
