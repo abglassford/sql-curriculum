@@ -146,7 +146,8 @@ createdb exercisedb
 From the terminal command line type:
 
 ```
-psql -d exercisedb -f unit-2/examples/02-statements.sql
+cd Exercises/src/customers
+psql -d exercisedb -f seed.sql
 ```
 
 __EXERCISE__

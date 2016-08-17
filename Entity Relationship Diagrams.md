@@ -484,7 +484,7 @@ Write an SQL command that displays the follow rows.
 
 ## Exercises
 
-- [Online Retailer](https://github.com/gSchool/sql-curriculum/blob/solutions/Unit-02-Relational/02-readme.md)
+- [Online Retailer](Exercises/src/customers/README.md)
 
 ## Resources
 

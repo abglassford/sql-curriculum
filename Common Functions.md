@@ -1,3 +1,5 @@
+# Common Functions
+
 ### CONCAT
 
 `SELECT * FROM authors WHERE name =CONCAT('b', 'ob');`

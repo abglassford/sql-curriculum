@@ -28,8 +28,7 @@ Additionally, indexes on number and timestamp columns are generally more effecti
 To get started, run the following shell commands.
 
 ```bash
-git clone https://github.com/gSchool/sql-curriculum.git
-cd sql-curriculum/Exercises/src/geo
+cd Exercises/src/geo
 createdb geodb
 psql geodb -f geo_dev.sql
 psql geodb

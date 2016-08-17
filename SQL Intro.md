@@ -695,9 +695,7 @@ Recreate the following ERD and populate each table with at least 10 pieces of da
 
 ---
 
-- https://github.com/gSchool/sql-curriculum
 - https://github.com/gSchool/postgres-for-js-devs
-- https://github.com/gSchool/sql-curriculum/tree/master/Unit-01-Intro
 - https://github.com/gSchool/sql-practice-commands
 - https://github.com/gSchool/learn-sql
 - https://github.com/gSchool/sql-homework

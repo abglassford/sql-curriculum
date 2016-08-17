@@ -1,1 +1,1 @@
-This article has [moved](../Entity Relationships.md).
+This article has [moved](../Entity Relationship Diagrams.md).
