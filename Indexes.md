@@ -1,48 +1,93 @@
-# Database Indexes
-
 ## Objectives
 
-- Describe what a database index is.
-- Explain why database indexes are important.
-- Create indexes in PostgreSQL.
+- Explain what an index is.
+- Explain why an index is useful.
+- Use indexes to improve the speed of information retrieval in PostgreSQL.
 
 ## What's an index?
 
-In relational databases, an **index** is a special lookup table used to improve the performance of data retrieval. When you imagine a database index, think of the index in the back of an encyclopedia. If you want to all the information on elephants, you find the subject in the index, lookup the page numbers that correspond to that subject, and then jump directly to one or more those pages.
+In a relational database system, an **index** is a special lookup table used to improve the speed of information retrieval for a specified table-column pair. An index on a table-column pair is like the index in an encyclopedia. You go to the index and follow the references to the desired rows that contain a table-column value.
 
-A database index is just like that—a pointer to data that lives somewhere else. And since they're just pointers, indexes can be created or dropped without effecting the data.
+For example, imagine a PostgreSQL database contains a `movies` table with an `id serial PRIMARY KEY` column. In PostgreSQL, every primary key is given an index and so, in this example, a `movies_pkey` index is automatically created for the `movie` table's primary key column.
+
+Over time, thousands of rows are inserted into the table and, eventually, PostgreSQL receives a query to select the row from the `movies` table where its `id` is `1001`. Instead of sequentially searching the entire `movies` table, PostgreSQL can use the `movies_pkey` index to locate the desired row in fraction of the time.
+
+```text
+                                                 movies
+                                     ┌────────┬────────────────────┐
+                                     │   id   │       title        │
+                                     ├────────┼────────────────────┤
+                  ┌────────┐         │   1    │       Frozen       │
+                  │   1    │         ├────────┼────────────────────┤
+                  ├────────┤         │   2    │ X-Men: Apocalypse  │
+                  │   2    │         ├────────┼────────────────────┤
+movies_pkey       ├────────┤         │  ...   │        ...         │
+┌────────┐        │  ...   │         ├────────┼────────────────────┤
+│  NULL  │        ├────────┤         │  999   │  The Conjuring 2   │
+├────────┤        │  999   │         ├────────┼────────────────────┤
+│  1000  │───┐    └────────┘         │  1000  │    Finding Dory    │
+├────────┤   │                       ├────────┼────────────────────┤
+│  2000  │   │    ┌────────┐    ┌───▶│  1001  │  The 5th Element   │
+├────────┤   └───▶│  1000  │    │    ├────────┼────────────────────┤
+│  3000  │        ├────────┤    │    │  ...   │        ...         │
+└────────┘        │  1001  │────┘    ├────────┼────────────────────┤
+                  ├────────┤         │  1999  │ Batman v Superman  │
+                  │  ...   │         ├────────┼────────────────────┤
+                  ├────────┤         │  2000  │    The Martian     │
+                  │  1999  │         ├────────┼────────────────────┤
+                  └────────┘         │  2001  │     Zoolander      │
+                                     ├────────┼────────────────────┤
+                                     │  ...   │        ...         │
+                                     └────────┴────────────────────┘
+```
+
+The diagram above is a picture of a data structure called a balance-tree (b-tree). A **data structure** is a particular way of organizing data so it can be used efficiently. Both an array and an object are two examples of a common data structures. Under the hood, PostgreSQL uses a b-tree to store the references of an index.
+
+A **b-tree** is a self-balancing tree data structure. The best way to explain a b-tree is to [see it in action](https://www.cs.usfca.edu/~galles/visualization/BTree.html). Suffice to say that, due to its structure and self-balancing nature, a b-tree can perform very fast operations such as searching, sequential accessing, inserting, and deleting. Later in this program, you'll learn how to implement a special kind of b-tree called a binary search tree. For now, you can happily leverage the hard work of the PostgreSQL development team.
+
+As you can see, an index doesn't contain any essential information. Therefore, it can safely be created or dropped without affecting the information it references.
+
+## Exercise
+
+Turn to a neighbor and explain in your own words what an index is.
 
 ## Why are indexes important?
 
-An index helps speed up `SELECT` queries with `WHERE` clauses, but it slows down `INSERT` and `UPDATE` statements. When index data is inserted or updated, the database must write the data in two places—the relation table and the index table. As a full stack developer, you'll have to determine if the trade-off of indexing is worth it. In general, indexes should be avoided on:
+An index is used to speed up `SELECT` commands on a table-column pair. As you'll see in a moment, a `SELECT` command for table-column pair without an index averages 10.4 ms, but with an index averages 0.7 ms. That's a significant speed up!
+
+Unfortunately, the price you pay is a slight slow down for `INSERT` and `UPDATE` commands on the corresponding table. This is because when a row is inserted into or updated in a table with an index, a record must be inserted or updated into the underlying b-tree index as well. As a web developer, you'll have to determine if the trade-off of adding an index is worth it.
+
+While an index can significantly speed up `SELECT` commands on the table-column pair, it should not be used for the following cases.
 
 - Tables with few rows.
 - Tables with frequent, large batch inserts or updates.
 - Columns with many `NULL` values.
-- Columns with frequent updates.
 
-Additionally, indexes on number and timestamp columns are generally more effective than indexes on textual columns, especially when searching for a particular word or phrase in a large amount of text.
+Additionally, an index on a number and timestamp column is generally more effective than an index on a textual column. This is especially true when querying a table for a particular word or phrase within a large amount of text.
 
-## How do you create indexes in PostgreSQL?
+### Exercise
+
+Take a moment to write down your thoughts on why indexes are useful. After about 30 seconds, your instructor will cold call on the class and ask what was written down.
+
+## How do you use indexes to improve the speed of information retrieval in PostgreSQL?
 
 To get started, run the following shell commands.
 
-```bash
-cd Exercises/src/geo
-createdb geodb
-psql geodb -f geo_dev.sql
-psql geodb
+```shell
+createdb geo_dev
+curl -fsSL https://git.io/voDXr | psql geo_dev
+psql geo_dev
 ```
 
-List the `places` table.
+Then, list the `places` table.
 
-```
+```text
 \d places
 ```
 
-And you should see something similar.
+And you should see something like this.
 
-```
+```text
                                      Table "public.places"
      Column     |          Type          |                      Modifiers
 ----------------+------------------------+-----------------------------------------------------
@@ -57,17 +102,17 @@ Indexes:
     "places_pkey" PRIMARY KEY, btree (id)
 ```
 
-As you can see, PostgreSQL automatically creates indexes are for primary key constraints. It's also worth mentioning that PostgreSQL do not automatically create indexes for foreign key constraints.
+As you can see, PostgreSQL automatically creates an index for a primary key constraints. However, it's important to remember that PostgreSQL do not automatically create an index for a foreign key constraint.
 
-List all the index tables to check the size of the index table.
+To list all index tables, with their size, run the following command.
 
-```
+```text
 \di+
 ```
 
 And you should see something similar.
 
-```
+```text
                              List of relations
  Schema |    Name     | Type  |   Owner   | Table  |  Size   | Description
 --------+-------------+-------+-----------+--------+---------+-------------
@@ -75,21 +120,21 @@ And you should see something similar.
 (1 row)
 ```
 
-Turn on the timing of commands.
+If it's not already configured, turn on the timing of commands.
 
-```
+```text
 \timing on
 ```
 
-And run the following query.
+Next, count the number of rows with the `id` column.
 
 ```sql
 SELECT COUNT(id) FROM places;
 ```
 
-You'll see something like this.
+And you should see something like this.
 
-```
+```text
  count
 -------
  86457
@@ -98,9 +143,7 @@ You'll see something like this.
 Time: 9.837 ms
 ```
 
-This query can't be optimized because it doesn't have a `WHERE` clause.
-
-Now, run the following query.
+A query without a `WHERE` clause can't be optimized. So let's fix that.
 
 ```sql
 SELECT COUNT(id) FROM places WHERE parent_id = 21138;
@@ -108,7 +151,7 @@ SELECT COUNT(id) FROM places WHERE parent_id = 21138;
 
 And you see something like this.
 
-```
+```text
 count
 -------
   897
@@ -119,7 +162,7 @@ Time: 10.656 ms
 
 To get get a statistically significant sample, run the query at least 7 times. On my computer, the average run time is about 10.4 ms.
 
-Unsurprisingly, the [`CREATE INDEX`][create-index] statement creates an index table. Use it to create an index for the `parent_id` column of the `places` table.
+Unsurprisingly, the [`CREATE INDEX`][create-index] statement creates an index. Use it to create an index for the `parent_id` column on the `places` table.
 
 ```sql
 CREATE INDEX ON places (parent_id);
@@ -127,20 +170,20 @@ CREATE INDEX ON places (parent_id);
 
 And you'll see something like this.
 
-```
+```text
 CREATE INDEX
 Time: 52.983 ms
 ```
 
 Now list out the index tables.
 
-```
+```text
 \di+
 ```
 
 And you'll see something like this.
 
-```
+```text
                                  List of relations
  Schema |         Name         | Type  |   Owner   | Table  |  Size   | Description
 --------+----------------------+-------+-----------+--------+---------+-------------
@@ -157,7 +200,7 @@ SELECT COUNT(id) FROM places WHERE parent_id = 21138;
 
 And you'll see something like this.
 
-```
+```text
 count
 -------
   897
@@ -176,7 +219,7 @@ SELECT COUNT(id) FROM places WHERE country_code = 'US' AND target_type = 'City';
 
 And you'll see something like this.
 
-```
+```text
  count
 -------
  16325
@@ -187,7 +230,7 @@ Time: 17.076 ms
 
 Run the query several times to get a statistically significant sample. On my computer, the average run time is about 16.3 ms.
 
-Because there are two columns in the query's `WHERE` clause, a two-column index table is needed. Create an index for the `country_code` and `target_type` columns of the `places` table.
+Because there are two columns in the query's `WHERE` clause, a two-column index is needed. Create an index for the `country_code` and `target_type` columns of the `places` table.
 
 ```sql
 CREATE INDEX ON places (country_code, target_type);
@@ -195,20 +238,20 @@ CREATE INDEX ON places (country_code, target_type);
 
 And you'll see something like this.
 
-```
+```text
 CREATE INDEX
 Time: 361.801 ms
 ```
 
 List out the index tables.
 
-```
+```text
 \di+
 ```
 
 And you'll see something like this.
 
-```
+```text
                                          List of relations
  Schema |                Name                 | Type  |   Owner   | Table  |  Size   | Description
 --------+-------------------------------------+-------+-----------+--------+---------+-------------
@@ -226,7 +269,7 @@ SELECT COUNT(id) FROM places WHERE country_code = 'US' AND target_type = 'City';
 
 And you'll see something like this.
 
-```
+```text
  count
 -------
  16325
@@ -246,7 +289,7 @@ SELECT COUNT(id) FROM places WHERE canonical_name = 'Seattle,Washington,United
 
 And you'll see something like this.
 
-```
+```text
  count
 -------
      1
@@ -257,7 +300,7 @@ Time: 11.210 ms
 
 Run the query several times to get a statistically significant sample. On my computer, the average run time is about 11.1 ms.
 
-**Unique indexes** are used not only for performance, but also for data integrity. A unique index table does not allow any duplicate values to be inserted. Create a unique index for the `canonical_name` column of the `places` table.
+A **unique index** is used not only for performance, but also for data integrity. A unique index does not allow any duplicate values to be inserted. Create a unique index for the `canonical_name` column of the `places` table.
 
 ```sql
 CREATE UNIQUE INDEX ON places (canonical_name);
@@ -265,14 +308,14 @@ CREATE UNIQUE INDEX ON places (canonical_name);
 
 And you'll see something like this.
 
-```
+```text
 CREATE INDEX
 Time: 1530.046 ms
 ```
 
 List out the index tables.
 
-```
+```text
 \di+
 ```
 
@@ -288,7 +331,7 @@ And you'll see something like this.
  public | places_pkey                         | index | ryansobol | places | 1912 kB |
  ```
 
- Go ahead and run the same query.
+Go ahead and run the same query.
 
 ```sql
 SELECT COUNT(id) FROM places WHERE canonical_name = 'Seattle,Washington,United States';
@@ -296,7 +339,7 @@ SELECT COUNT(id) FROM places WHERE canonical_name = 'Seattle,Washington,United S
 
 And you'll see something like this.
 
-```
+```text
   count
  -------
       1
@@ -315,11 +358,13 @@ INSERT INTO places (canonical_name) VALUES ('Seattle,Washington,United States');
 
 And you'll see something like this.
 
-```
+```text
 ERROR:  duplicate key value violates unique constraint "places_canonical_name_idx"
 DETAIL:  Key (canonical_name)=(Seattle,Washington,United States) already exists.
 Time: 0.818 ms
 ```
+
+Under the hood, a unique index is identical to a unique constraint. The only difference is a unique partial index can only be declared with the `CREATE UNIQUE INDEX` command. See the PostgreSQL documentation on [Partial Indexes](https://www.postgresql.org/docs/9.5/static/indexes-partial.html) and this [Stack Overflow article](http://stackoverflow.com/questions/23542794/postgres-unique-constraint-vs-index#23665806) if you want to know more.
 
 Drop the `places_canonical_name_idx` index table.
 
@@ -329,9 +374,15 @@ DROP INDEX places_canonical_name_idx;
 
 And you'll see something similar.
 
-```
+```text
 DROP INDEX
 Time: 2.175 ms
+```
+
+Then, verify this query still works.
+
+```sql
+SELECT COUNT(id) FROM places WHERE canonical_name = 'Seattle,Washington,United States';
 ```
 
 Drop the `places_country_code_target_type_idx` index table.
@@ -342,9 +393,15 @@ DROP INDEX places_country_code_target_type_idx;
 
 And you'll see something similar.
 
-```
+```text
 DROP INDEX
 Time: 1.828 ms
+```
+
+Then, verify this query still works.
+
+```sql
+SELECT COUNT(id) FROM places WHERE country_code = 'US' AND target_type = 'City';
 ```
 
 Drop the `places_parent_id_idx` index table.
@@ -355,15 +412,21 @@ DROP INDEX places_parent_id_idx;
 
 And you'll see something similar.
 
-```
+```text
 DROP INDEX
 Time: 1.896 ms
 ```
 
+Then, verify this query still works.
+
+```sql
+SELECT COUNT(id) FROM places WHERE parent_id = 21138;
+```
+
+## Resources
+
+- [Pat Shaughnessy - Discovering the Computer Science Behind Postgres Indexes](http://patshaughnessy.net/2014/11/11/discovering-the-computer-science-behind-postgres-indexes)
+- [PostgreSQL Documentation - `CREATE INDEX`](https://www.postgresql.org/docs/current/static/sql-createindex.html)
+- [Wikipedia - B-tree](https://en.wikipedia.org/wiki/B-tree)
+
 [create-index]: http://www.postgresql.org/docs/current/static/sql-createindex.html
-
-## How do you know when you need indexes?
-
-Use `explain`.
-
-[http://www.postgresql.org/docs/9.4/static/sql-explain.html](http://www.postgresql.org/docs/9.4/static/sql-explain.html)

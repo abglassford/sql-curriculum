@@ -1,4 +1,9 @@
-## Data Normalization
+# Data Normalization
+
+## Objectives
+
+* Normalizes data to the Third Normal Form
+* Model relationships using ERD
 
 ### Entry Ticket
 
@@ -17,6 +22,13 @@
 - Second Normal Form
 - Third Normal Form
 
+## Guiding Questions
+
+* What is normalization, and why would you want to do it?
+* What is first normal form (1NF)? Give an example.
+* What is second normal form (2NF)? Give an example.
+* What is third normal form (3NF)? Give an example.
+* What is denormalization, and why would you want to do it?
 
 ### Data Modeling
 
@@ -28,14 +40,11 @@ When we model our data, we create what's called a _schema_.
 
 The first thing we should do is think about what we're modeling. These are typically **nouns**. Nouns have attributes, and attributes have values.
 
-Let's look at an example:
-![]()
-
 ### Normalization
 
 When we talk about _Data Normalization_, we're referring to how much data must be repeated within our database, and how canonical each entity is. There are several categories, called _Normal Forms_, with decreasing repetition and increasing complexity.
 
-Here's an example of not normalized data:
+Here's an example of normalized data that is not normalized:
 
     Name : Shirley
     Job Title : night shift supervisor
