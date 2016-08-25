@@ -12,7 +12,7 @@ From the terminal command line (not the psql terminal) type:
 
 ```
 cd Exercises/src/customers
-psql -d exercisedb -f seeds.sql
+psql -d exercisedb -f seed.sql
 ```
 
 ## Query Practice
