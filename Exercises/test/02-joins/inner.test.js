@@ -1,6 +1,7 @@
 'use strict';
 
 const fs = require('fs');
+require('../support');
 
 describe("Inner joins", () => {
 
