@@ -12,8 +12,8 @@ create a table named sports that has:
 create a table named cars that has:
 
 - an autoincrementing primary key field named id
-- a varchar column named make
-- a varchar column named model
-- a numeric column named year
+- a non-nullable varchar column named make
+- a non-nullable varchar column named model
+- a non-nullable numeric column named year
 
 */
