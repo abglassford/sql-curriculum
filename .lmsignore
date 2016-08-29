@@ -5,3 +5,4 @@ Unit-02-Relational
 Unit-03-Aggregations
 index.js
 .gitignore
+.lmsignore

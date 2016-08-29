@@ -18,6 +18,11 @@ module.exports = {
         {text: 'DDL and DML', url: './SQL Intro.md'},
         {text: 'SQL Operators', url: './Operators.md'},
         {text: 'Common Functions', url: './Common Functions.md'},
+      ]
+    },
+    {
+      title: 'Relationships and Joins',
+      links: [
         {text: 'Introduction to Joins and Relationships', url: './Joins.md'},
         {text: 'Entity Relationship Diagrams', url: './Entity Relationship Diagrams.md'},
         {
@@ -26,6 +31,11 @@ module.exports = {
             {text: "More Normalization Examples", url: "./Normalization Examples.md"}
           ]
         },
+      ]
+    },
+    {
+      title: 'Additional Topics',
+      links: [
         {text: 'Indexes', url: './Indexes.md'},
         {text: 'Sets and Subqueries', url: './Sets and Subqueries.md'},
         {text: 'Roles and Permissions', url: './Roles and Permissions.md'},

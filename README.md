@@ -12,10 +12,16 @@
 1. [DDL and DML](./SQL Intro.md)
 1. [SQL Operators](./Operators.md)
 1. [Common Functions](./Common Functions.md)
+
+## Relationships and Joins
+
 1. [Introduction to Joins and Relationships](./Joins.md)
 1. [Entity Relationship Diagrams](./Entity Relationship Diagrams.md)
 1. [Normalization](./Normalization.md)
    1. [More Normalization Examples](./Normalization Examples.md)
+
+## Additional Topics
+
 1. [Indexes](./Indexes.md)
 1. [Sets and Subqueries](./Sets and Subqueries.md)
 1. [Roles and Permissions](./Roles and Permissions.md)
