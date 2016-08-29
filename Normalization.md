@@ -205,3 +205,103 @@ Rules of Thumb:
 * If it's a noun (an Order, a Product, a Book, a Park, an Author, etc) it probably needs it's own table and a relationship.
 * Use varchar and text types if you only need many options along one field that might have more options than you realized in the beginning - like "Gender", "Relationship Status", "Country", "Payment Type", "Contact Preference". Creating another table to ensure a constrained list of options is chosen from is often considered over-engineering.
 * The more normalized your data is, the more consistent it is. If you're interested in analyzing the data and drawing inferences later, you want to make sure it is as consistent as possible. On the flip side, don't introduce artificial bias by creating too many constraints based on untested assumptions.
+
+## Slides
+
+* [Normalization Slides](https://docs.google.com/a/galvanize.com/presentation/d/1XQ-cst2L-g7T4Nh2OxCSHgdEGhRRMAvvzrNvAcdFIig/edit?usp=sharing)
+
+## Challenges
+
+[Repo](https://github.com/gSchool/dataModels)
+
+### Challenge 1
+
+Normalize this
+
+![data model](https://s3-us-west-2.amazonaws.com/lesson-plan-images/normalization_images/Normalization+Exercises+-+Denormalized.jpeg)
+
+Solution Notes
+
+* An over the top solution:
+  ![over the top solution](https://s3-us-west-2.amazonaws.com/lesson-plan-images/normalization_images/Normalization+Exercises+-+Normalized.jpeg)
+* This model used lookup tables for the types of dates and payments
+* `sale_price` is on the `Order_Item` table to lock in the item's price at the point of sale. This is _critical_- if left out, the price of the historical transaction will fluctuate whenever the price of any of the items change.
+* The dates don't technically have to be normalized for this to be in 3NF. However, normalizing them out allows you to store different kinds of dates in the future, and reduces blank columns for things that may not apply to a particular order (such as shipping).
+
+### Challenge 2
+
+Normalize this
+
+<img src="https://s3-us-west-2.amazonaws.com/lesson-plan-images/normalization_images/Normalization+Exercises+-+Denormalized+2+(1).jpeg" />
+
+Solution Notes
+
+* An over the top solution:
+  ![over the top solution](https://s3-us-west-2.amazonaws.com/lesson-plan-images/normalization_images/Normalization+Exercises+-+Normalized+2.jpeg)
+* Pregnancy is normalized out as a condition
+* Patient can now have multiple weigh-ins
+* Physicians can now be a heart specialist for one patient, or primary care physician for another patient
+
+### Challenge #3
+
+Normalize this
+
+![data model](https://s3-us-west-2.amazonaws.com/lesson-plan-images/normalization_images/Normalization+Exercises+-+Denormalized+3.jpeg)
+
+Solution Notes:
+
+* An over the top solution
+  ![over the top solution](https://s3-us-west-2.amazonaws.com/lesson-plan-images/normalization_images/Normalization+Exercises+-+Normalized+3.jpeg)
+* The user agreement may not technically need to be normalized out, but it allows for multiple kinds of agreements (such as for each subscription
+* Normalizing out images is optional, but allows you to store every image url in one central store. This aids in things like updating URLs.
+
+## More Normal Forms
+
+* Boyce-Codd Normal Form (BCNF)
+* Fourth Normal Form (4NF)
+* Fifth Normal Form (5NF)
+* Domain-key Normal Form (DK/NF)
+
+## Resources
+
+* [Wikipedia](https://en.wikipedia.org/wiki/Database_normalization)
+* [About](http://databases.about.com/od/specificproducts/a/normalization.htm)
+* [Tutorials Point](http://www.tutorialspoint.com/dbms/database_normalization.htm)
+* [Normalization Walkthrough](http://holowczak.com/database-normalization/)
+
+## Guiding Question Answers
+
+* What is normalization, and why would you want to do it?
+
+> Normalization is the process of removing redundancy in a database. You normalize data to remove duplicate references that need to be syncronized, allowing you the flexibility to change a piece of data in one place instead of many.
+
+* What is first normal form (1NF)? Give an example.
+
+> No repeating rows. Something is in 1NF if every column has one and only one entry in each row.
+> A column that has a list of colors, or a list of cities, or any kind of multiple value for a single column.
+
+* What is second normal form (2NF)? Give an example.
+
+> No partial dependencies. Something is in 2NF if every is non-key column is dependent on the primary key.
+> A `Registration` table that has a `student_id`, a `class_id`, and a `student_name`. The `student_name` is only dependent on the `student_id`, so it should go to that column.
+
+* What is third normal form (3NF)? Give an example.
+
+> No transitive dependencies. Something is in 3NF if every column in a table is dependent on only the PK directly, not via its relationship to another column.
+> A `Order` table that has `payment_type` and `payment_amount` columns. These depend on each other, but not the `id`. They should be abstracted out into a `Payment` table.
+
+* What is denormalization, and why would you want to do it?
+
+> Data that's spread across many tables is accessed with `JOIN` statements. Join statements are comparatively expensive in SQL, and lots of `JOIN` statements may unacceptably impact performance-sensitive tasks.
+
+## Push Questions
+
+* If denormalization is so fast, what would it be like to denormalize as much as possible and enforce relationships outside the database?
+
+> This is the general concept behind NoSQL
+
+* What are some things that can go wrong if you don't normalize?
+
+> All the data might not show up on a query because they were entered in differently in different places
+> Data can get updated in one place but not another, ruining the referential integrity of the database
+> It may difficult to extend the functionality of a table because it's coupled to unrelated data

@@ -20,7 +20,12 @@ module.exports = {
         {text: 'Common Functions', url: './Common Functions.md'},
         {text: 'Introduction to Joins and Relationships', url: './Joins.md'},
         {text: 'Entity Relationship Diagrams', url: './Entity Relationship Diagrams.md'},
-        {text: 'Normalization', url: './Normalization.md'},
+        {
+          text: 'Normalization', url: './Normalization.md',
+          links: [
+            {text: "More Normalization Examples", url: "./Normalization Examples.md"}
+          ]
+        },
         {text: 'Indexes', url: './Indexes.md'},
         {text: 'Sets and Subqueries', url: './Sets and Subqueries.md'},
         {text: 'Roles and Permissions', url: './Roles and Permissions.md'},
