@@ -7,6 +7,11 @@ create a table named sports that has:
 
 */
 
+CREATE TABLE sports (
+  id serial,
+  name varchar NOT NULL
+);
+
 /* Exercise createCars
 
 create a table named cars that has:
@@ -17,3 +22,10 @@ create a table named cars that has:
 - a non-nullable numeric column named year
 
 */
+
+CREATE TABLE cars (
+  id serial NOT NULL,
+  make varchar NOT NULL,
+  model varchar NOT NULL,
+  year numeric NOT NULL
+);
